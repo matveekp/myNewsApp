@@ -6,12 +6,12 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import ru.matveev.demo.entity.RssBean;
 
-import java.util.Optional;
+
 
 public interface RssBeanRepository extends CrudRepository<RssBean, Integer> {
 
-    @Query("SELECT b FROM RssBean b order by b.newsDate")
-    Optional<RssBean> findAllByDate();
+    @Query("SELECT b FROM RssBean b order by b.newsDate desc")
+    Iterable<RssBean> findAllByDate();
 
 
 }

@@ -57,14 +57,13 @@ public class MainController {
                     rssBeanRepository.save(rss);
 
                 }
-
             } catch (FeedException | IOException e) {
                 e.printStackTrace();
             }
 
         }
 
-        model.addAttribute("allNews", rssBeanRepository.findAll());
+        model.addAttribute("allNews", rssBeanRepository.findAllByDate());
 
         return "index";
     }
