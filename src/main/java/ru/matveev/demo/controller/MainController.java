@@ -20,15 +20,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 
 @Controller
 public class MainController {
     @Autowired
     RssBeanRepository rssBeanRepository;
+
+    Set<String> titles = new HashSet<>();
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String startForm(@ModelAttribute RssBean rssBean, Model model) {
@@ -45,16 +45,21 @@ public class MainController {
                 SyndFeed feed = new SyndFeedInput().build(reader);
 
                 for (SyndEntry entry : feed.getEntries()) {
+
                     RssBean rss = new RssBean();
                     SyndContent syndContent = entry.getDescription();
 
-                    rss.setTitle(entry.getTitle());
-                    rss.setDescription(syndContent.getValue());
-//                    rss.setLink(entry.getLink());
-                    rss.setNewsDate(convertToLocalDateViaInstant(entry.getPublishedDate()));
-                    rss.setUrl(new URL(entry.getUri()));
+                    if(!titles.contains(entry.getTitle())) {
 
-                    rssBeanRepository.save(rss);
+                        rss.setTitle(entry.getTitle());
+                        rss.setDescription(syndContent.getValue());
+//                    rss.setLink(entry.getLink());
+                        rss.setNewsDate(convertToLocalDateViaInstant(entry.getPublishedDate()));
+                        rss.setUrl(new URL(entry.getUri()));
+
+                        titles.add(rss.getTitle());
+                        rssBeanRepository.save(rss);
+                    }
 
                 }
             } catch (FeedException | IOException e) {
