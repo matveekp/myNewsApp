@@ -28,7 +28,7 @@ public class MainController {
     @Autowired
     RssBeanRepository rssBeanRepository;
 
-    Set<String> titles = new HashSet<>();
+    Set<String> links = new HashSet<>();
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String startForm(@ModelAttribute RssBean rssBean, Model model) {
@@ -49,7 +49,7 @@ public class MainController {
                     RssBean rss = new RssBean();
                     SyndContent syndContent = entry.getDescription();
 
-                    if(!titles.contains(entry.getTitle())) {
+                    if(!links.contains(entry.getUri())) {
 
                         rss.setTitle(entry.getTitle());
                         rss.setDescription(syndContent.getValue());
@@ -57,7 +57,7 @@ public class MainController {
                         rss.setNewsDate(convertToLocalDateViaInstant(entry.getPublishedDate()));
                         rss.setUrl(new URL(entry.getUri()));
 
-                        titles.add(rss.getTitle());
+                        links.add(entry.getUri());
                         rssBeanRepository.save(rss);
                     }
 
