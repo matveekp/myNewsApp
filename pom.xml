@@ -59,6 +59,13 @@
 		</dependency>
 
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+
 
 
 		<!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-java8time -->
@@ -66,6 +73,12 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-java8time</artifactId>
 			<version>3.0.4.RELEASE</version>
+		</dependency>
+
+		<!--Создание пула соединений-->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
 		</dependency>
 
 

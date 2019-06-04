@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+</h3>
+<h3>Лента новостей:</h3>
+</h3>
+</h3>
+
+
+<div th:each="news : ${allNews}">
+    <p th:text="${news.title}"></p>
+    <p th:text="${news.description}"></p>
+    <!--    <p th:text="${news.link}"></p>-->
+    <!--    <p th:text="${news.newsDate}"></p>-->
+    <p th:text="${#temporals.format(news.newsDate, 'yyyy-MM-dd HH:mm:ss')}">startTime</p>
+
+    <a th:href="${news.url}">Подробнее</a>
+    <h1>----------------------------------</h1>
+</div>
+
+</body>
+</html>

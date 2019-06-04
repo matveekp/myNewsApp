@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table
@@ -70,4 +71,5 @@ public class RssBean {
         this.url = url;
     }
 
+   
 }

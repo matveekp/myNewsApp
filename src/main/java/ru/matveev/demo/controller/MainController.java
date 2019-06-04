@@ -28,55 +28,21 @@ public class MainController {
     @Autowired
     RssBeanRepository rssBeanRepository;
 
-    Set<String> links = new HashSet<>();
-
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String startForm(@ModelAttribute RssBean rssBean, Model model) {
-
-        List<String> urls = new ArrayList<>();
-        urls.add("http://rss.garant.ru/news/");
-        urls.add("http://www.vesti.ru/vesti.rss");
-        urls.add("http://www.vsesmi.ru/rss/19/");
-
-
-        for (String rssUrl : urls) {
-
-            try (XmlReader reader = new XmlReader(new URL(rssUrl))) {
-                SyndFeed feed = new SyndFeedInput().build(reader);
-
-                for (SyndEntry entry : feed.getEntries()) {
-
-                    RssBean rss = new RssBean();
-                    SyndContent syndContent = entry.getDescription();
-
-                    if(!links.contains(entry.getUri())) {
-
-                        rss.setTitle(entry.getTitle());
-                        rss.setDescription(syndContent.getValue());
-//                    rss.setLink(entry.getLink());
-                        rss.setNewsDate(convertToLocalDateViaInstant(entry.getPublishedDate()));
-                        rss.setUrl(new URL(entry.getUri()));
-
-                        links.add(entry.getUri());
-                        rssBeanRepository.save(rss);
-                    }
-
-                }
-            } catch (FeedException | IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-        model.addAttribute("allNews", rssBeanRepository.findAllByDate());
-
+//        model.addAttribute("allNews", rssBeanRepository.findAllByDate());
+        model.addAttribute("top10", rssBeanRepository.findLast10());
         return "index";
     }
 
-    public LocalDateTime convertToLocalDateViaInstant(Date dateToConvert) {
-        return dateToConvert.toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
+    @RequestMapping(value = "/allNews", method = RequestMethod.GET)
+    public String allNews(@ModelAttribute RssBean rssBean, Model model) {
+//        model.addAttribute("allNews", rssBeanRepository.findAllByDate());
+        model.addAttribute("allNews", rssBeanRepository.findAllByDate());
+        return "allNews";
     }
+
+
+
 
 }
