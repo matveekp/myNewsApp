@@ -1,6 +1,5 @@
 package ru.matveev.demo.parser;
 
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +14,6 @@ public class ThreadConfig {
     private int corePoolSize;
     private int maxPoolSize;
     private String threadNamePrefix;
-
 
     // создаем пул потоков
     @Bean

@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.net.URL;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Entity
 @Table
@@ -20,12 +19,10 @@ public class RssBean {
     private String title;
     @Column(length=1000000)
     private String description;
-//    private String link;
     private URL url;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime newsDate;
-
 
     public String getTitle() {
         return title;
@@ -39,13 +36,6 @@ public class RssBean {
     public void setDescription(String description) {
         this.description = description;
     }
-
-//    public String getLink() {
-//        return link;
-//    }
-//    public void setLink(String link) {
-//        this.link = link;
-//    }
 
     public int getId() {
         return id;
