@@ -66,6 +66,9 @@ public class ParserThread implements Runnable {
             }
         } catch (FeedException | IOException e) {
             e.printStackTrace();
+            System.out.println("------");
+            System.out.println("ERROR on the " + link + " link");
+            System.out.println("------");
         }
 
     }

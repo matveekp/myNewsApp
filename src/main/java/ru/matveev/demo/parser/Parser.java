@@ -15,9 +15,16 @@ import java.util.*;
 @Component //объект создается автоматически
 public class Parser {
 
-    Set<String> links = Collections.synchronizedSet(new HashSet<>());
+    @Autowired //свойство создается автматом
+    private ParserConfig config;
 
-    List<String> urls = new ArrayList<>();
+    @Autowired
+    private TaskExecutor taskExecutor;
+
+    @Autowired
+    private ApplicationContext context; // получить все объекты, которые там созданы
+
+    private Set<String> links = Collections.synchronizedSet(new HashSet<>());
 
     public Set<String> getLinks() {
         return links;
@@ -27,24 +34,11 @@ public class Parser {
         this.links = links;
     }
 
-    @Autowired
-    private TaskExecutor taskExecutor;
-
-    @Autowired
-    private ApplicationContext context; // получить все объекты, которые там созданы
-
     @Scheduled(fixedRate = 60000)
     //@Bean //запустится один раз, вместо этого делаем @EnableScheduling + @Scheduled у метода
-    public void start() throws IOException {
+    public void start() {
 
-
-        urls.add("http://rss.garant.ru/news/");
-        urls.add("http://www.vesti.ru/vesti.rss");
-        urls.add("http://www.vsesmi.ru/rss/19/");
-        urls.add("https://news.yandex.ru/index.rss");
-
-
-        for (String rssUrl : urls) {
+        for (String rssUrl : config.getUrls()) {
             ParserThread thread = context.getBean(ParserThread.class);
             thread.setLink(rssUrl);
             taskExecutor.execute(thread);
