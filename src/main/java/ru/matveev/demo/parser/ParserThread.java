@@ -6,6 +6,7 @@ import com.rometools.rome.feed.synd.SyndFeed;
 import com.rometools.rome.io.FeedException;
 import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -26,6 +27,8 @@ public class ParserThread implements Runnable {
 
     @Autowired
     private RssBeanRepository rssBeanRepository;
+
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(ParserThread.class);
 
     private Parser parser;
     private String link;
@@ -59,16 +62,16 @@ public class ParserThread implements Runnable {
 
                     parser.getLinks().add(entry.getUri());
                     rssBeanRepository.save(rss);
-
-                    System.out.println(parser.getLinks().size());
-                    System.out.println("added by " + Thread.currentThread().getName());
                 }
             }
         } catch (FeedException | IOException e) {
-            e.printStackTrace();
-            System.out.println("------");
-            System.out.println("ERROR on the " + link + " link");
-            System.out.println("------");
+            //e.printStackTrace();
+
+
+
+            LOGGER.error("ERROR at parsing RSS link: " + link);
+//            LOGGER.error(e.getMessage());
+            LOGGER.error(e.toString());
         }
 
     }

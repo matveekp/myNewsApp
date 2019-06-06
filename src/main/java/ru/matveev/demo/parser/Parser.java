@@ -1,6 +1,8 @@
 package ru.matveev.demo.parser;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.task.TaskExecutor;
@@ -24,6 +26,8 @@ public class Parser {
 
     private Set<String> links = Collections.synchronizedSet(new HashSet<>());
 
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Parser.class);
+
     public Set<String> getLinks() {
         return links;
     }
@@ -32,7 +36,7 @@ public class Parser {
         this.links = links;
     }
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 300000)
     //@Bean //запустится один раз, вместо этого делаем @EnableScheduling + @Scheduled у метода
     public void start() {
 
