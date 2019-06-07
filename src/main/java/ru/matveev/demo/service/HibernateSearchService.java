@@ -41,7 +41,7 @@ public class HibernateSearchService {
 
         //обозначаем поля, по которым необходимо произвести поиск
         //keyword () указывает, что мы ищем одно конкретное слово, onField () сообщает Lucene, где искать, а matching () что искать.
-        Query luceneQuery = qb.keyword().fuzzy().withEditDistanceUpTo(2).withPrefixLength(1).onFields("title")
+        Query luceneQuery = qb.keyword().fuzzy().withEditDistanceUpTo(1).withPrefixLength(1).onFields("title")
                 .matching(searchTerm).createQuery();
 
 
