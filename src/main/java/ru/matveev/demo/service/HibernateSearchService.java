@@ -25,21 +25,16 @@ public class HibernateSearchService {
     private FullTextEntityManager fullTextEntityManager;
 
     @Transactional
-    public  void startIndexing(){
-        fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-        fullTextEntityManager.createIndexer().start();
-    }
-
-
-    @Transactional
     public List<RssBean> fuzzySearch(String searchTerm) {
 
         //извлекаем fullTextEntityManager, используя entityManager
         fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
 
-
-        //fullTextEntityManager.createIndexer().start();
-
+        try {
+            fullTextEntityManager.createIndexer().startAndWait();
+        } catch (InterruptedException e) {
+            LOGGER.error(e.toString());
+        }
 
         // создаем запрос при помощи Hibernate Search query DSL
         QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(RssBean.class).get();

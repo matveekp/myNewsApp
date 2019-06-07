@@ -9,6 +9,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import ru.matveev.demo.service.HibernateSearchService;
 
 import java.util.*;
 
@@ -40,12 +41,12 @@ public class Parser {
     @Scheduled(fixedRate = 300000)
     //@Bean //запустится один раз, вместо этого делаем @EnableScheduling + @Scheduled у метода
     public void start() {
-
         try {
             for (String rssUrl : config.getUrls()) {
                 ParserThread thread = context.getBean(ParserThread.class);
                 thread.setLink(rssUrl);
-                taskExecutor.execute(thread);            }
+                taskExecutor.execute(thread);
+            }
         } catch (Exception e) {
             LOGGER.error(e.toString());
         }
