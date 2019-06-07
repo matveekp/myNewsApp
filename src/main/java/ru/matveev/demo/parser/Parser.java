@@ -1,7 +1,7 @@
 package ru.matveev.demo.parser;
 
 
-import org.slf4j.Logger;
+import org.hibernate.search.jpa.FullTextEntityManager;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -9,6 +9,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
 import java.util.*;
 
 @EnableScheduling //запуск по расписанию
@@ -40,10 +41,13 @@ public class Parser {
     //@Bean //запустится один раз, вместо этого делаем @EnableScheduling + @Scheduled у метода
     public void start() {
 
-        for (String rssUrl : config.getUrls()) {
-            ParserThread thread = context.getBean(ParserThread.class);
-            thread.setLink(rssUrl);
-            taskExecutor.execute(thread);
+        try {
+            for (String rssUrl : config.getUrls()) {
+                ParserThread thread = context.getBean(ParserThread.class);
+                thread.setLink(rssUrl);
+                taskExecutor.execute(thread);            }
+        } catch (Exception e) {
+            LOGGER.error(e.toString());
         }
     }
 

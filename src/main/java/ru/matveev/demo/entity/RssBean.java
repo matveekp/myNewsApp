@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table
-@Indexed
+@Indexed //сущность должна быть проиндексирована.
 public class RssBean {
 
 
@@ -22,7 +22,7 @@ public class RssBean {
     @GenericGenerator(name = "increment", strategy = "increment")
     private int id;
 
-    @Field(index= Index.YES, analyze= Analyze.YES, store=Store.NO)
+    @Field(index= Index.YES, analyze= Analyze.YES, store=Store.NO) //определяем обязательные атрибуты как доступные для поиска
     private String title;
     @Column(length=1000000)
     private String description;

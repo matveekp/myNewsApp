@@ -22,22 +22,33 @@ public class HibernateSearchService {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(HibernateSearchService.class);
 
+    private FullTextEntityManager fullTextEntityManager;
+
+    @Transactional
+    public  void startIndexing(){
+        fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+        fullTextEntityManager.createIndexer().start();
+    }
+
+
     @Transactional
     public List<RssBean> fuzzySearch(String searchTerm) {
 
         //извлекаем fullTextEntityManager, используя entityManager
-        FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+        fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
+
+
+        //fullTextEntityManager.createIndexer().start();
+
 
         // создаем запрос при помощи Hibernate Search query DSL
         QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(RssBean.class).get();
 
         //обозначаем поля, по которым необходимо произвести поиск
+        //keyword () указывает, что мы ищем одно конкретное слово, onField () сообщает Lucene, где искать, а matching () что искать.
         Query luceneQuery = qb.keyword().fuzzy().withEditDistanceUpTo(2).withPrefixLength(1).onFields("title")
                 .matching(searchTerm).createQuery();
 
-
-//        Query luceneQuery = qb.keyword().onFields("title")
-//                .matching(searchTerm).createQuery();
 
         //оборачиваем Lucene Query в Hibernate Query object
         javax.persistence.Query jpaQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, RssBean.class);
