@@ -1,7 +1,6 @@
 package ru.matveev.demo.parser;
 
 
-import org.hibernate.search.jpa.FullTextEntityManager;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -21,10 +20,15 @@ public class Parser {
     private ParserConfig config;
 
     @Autowired
+    private HibernateSearchService hibernateSearchService;
+
+    @Autowired
     private TaskExecutor taskExecutor;
 
     @Autowired
     private ApplicationContext context; // получить все объекты, которые там созданы
+
+    private boolean firstTimeIndex;
 
     private Set<String> links = Collections.synchronizedSet(new HashSet<>());
 
@@ -50,6 +54,13 @@ public class Parser {
         } catch (Exception e) {
             LOGGER.error(e.toString());
         }
+
+        if (firstTimeIndex) {   // если это первый запуск, то будет ошибка индексирования
+            hibernateSearchService.indexing();
+        }
+
+        firstTimeIndex = true;
+
     }
 
 

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.matveev.demo.entity.RssBean;
 import ru.matveev.demo.repositories.RssBeanRepository;
+import ru.matveev.demo.service.HibernateSearchService;
 
 import java.io.IOException;
 import java.net.URL;
@@ -51,8 +52,8 @@ public class ParserThread implements Runnable {
             for (SyndEntry entry : feed.getEntries()) {
                 if (!parser.getLinks().contains(entry.getUri())) {
 
-                RssBean rss = new RssBean();
-                SyndContent syndContent = entry.getDescription();
+                    RssBean rss = new RssBean();
+                    SyndContent syndContent = entry.getDescription();
 
                     rss.setTitle(entry.getTitle());
                     rss.setDescription(syndContent.getValue());
@@ -65,12 +66,7 @@ public class ParserThread implements Runnable {
                 }
             }
         } catch (FeedException | IOException e) {
-            //e.printStackTrace();
-
-
-
             LOGGER.error("ERROR at parsing RSS link: " + link);
-//            LOGGER.error(e.getMessage());
             LOGGER.error(e.toString());
         }
 
