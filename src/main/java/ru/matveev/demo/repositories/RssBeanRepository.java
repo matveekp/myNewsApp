@@ -13,9 +13,4 @@ public interface RssBeanRepository extends CrudRepository<RssBean, Integer> {
     @Query(nativeQuery = true, value = "SELECT * FROM rss_bean  order by news_date desc limit 10")
     Iterable<RssBean> findLast10();
 
-//    @Query("SELECT b FROM RssBean b where b.title order by b.newsDate desc")
-//    Iterable<RssBean> findByTitle();
-
-
-
 }

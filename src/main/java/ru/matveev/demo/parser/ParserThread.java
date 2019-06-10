@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import ru.matveev.demo.entity.RssBean;
 import ru.matveev.demo.repositories.RssBeanRepository;
-import ru.matveev.demo.service.HibernateSearchService;
 
 import java.io.IOException;
 import java.net.URL;

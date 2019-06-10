@@ -28,7 +28,7 @@ public class Parser {
     @Autowired
     private ApplicationContext context; // получить все объекты, которые там созданы
 
-    private boolean firstTimeIndex;
+    private boolean notFirstTimeIndexing;
 
     private Set<String> links = Collections.synchronizedSet(new HashSet<>());
 
@@ -55,11 +55,21 @@ public class Parser {
             LOGGER.error(e.toString());
         }
 
-        if (firstTimeIndex) {   // если это первый запуск, то будет ошибка индексирования
-            hibernateSearchService.indexing();
+        // если это первый запуск, то будет ошибка NullPointerException.
+        // Поэтому пауза перед началом индексирования должна быть дольше чем при последующих запусках
+        try {
+            if (notFirstTimeIndexing) {
+                Thread.sleep(15000);
+                hibernateSearchService.indexing();
+            } else {
+                Thread.sleep(30000);
+                hibernateSearchService.indexing();
+                notFirstTimeIndexing = true;
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.toString());
         }
 
-        firstTimeIndex = true;
 
     }
 

@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.matveev.demo.entity.RssBean;
 import ru.matveev.demo.repositories.RssBeanRepository;
 
-import java.util.List;
-
 @Controller
 public class MainController {
     @Autowired

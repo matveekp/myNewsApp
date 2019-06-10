@@ -26,7 +26,12 @@ public class HibernateSearchService {
 
     @Transactional
     public void indexing() {
-            fullTextEntityManager.createIndexer().start();
+//        try {
+//            fullTextEntityManager.createIndexer().startAndWait();}
+//        catch (InterruptedException e) {
+//            LOGGER.error(e.toString());
+//        }
+        fullTextEntityManager.createIndexer().start();
     }
 
     @Transactional
@@ -34,12 +39,6 @@ public class HibernateSearchService {
 
         //извлекаем fullTextEntityManager, используя entityManager
         fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-
-//        try {
-//            fullTextEntityManager.createIndexer().startAndWait();
-//        } catch (InterruptedException e) {
-//            LOGGER.error(e.toString());
-//        }
 
         // создаем запрос при помощи Hibernate Search query DSL
         QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(RssBean.class).get();
