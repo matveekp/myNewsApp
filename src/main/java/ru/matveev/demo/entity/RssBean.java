@@ -27,6 +27,8 @@ public class RssBean {
     @Column(length=1000000)
     private String description;
     private URL url;
+    private int rating;
+    private String source;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime newsDate;
@@ -66,6 +68,22 @@ public class RssBean {
 
     public void setUrl(URL url) {
         this.url = url;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
     }
 
     @Override

@@ -58,7 +58,10 @@ public class ParserThread implements Runnable {
                     rss.setDescription(syndContent.getValue());
 //                    rss.setLink(entry.getLink());
                     rss.setNewsDate(convertToLocalDateViaInstant(entry.getPublishedDate()));
-                    rss.setUrl(new URL(entry.getUri()));
+                    URL url = new URL(entry.getUri());
+                    rss.setUrl(url);
+                    rss.setSource(url.getHost());
+                    rss.setRating(5);
 
                     parser.getLinks().add(entry.getUri());
                     rssBeanRepository.save(rss);
