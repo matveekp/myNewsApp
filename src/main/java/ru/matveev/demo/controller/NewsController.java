@@ -9,7 +9,8 @@ import ru.matveev.demo.entity.RssBean;
 import ru.matveev.demo.repositories.RssBeanRepository;
 import ru.matveev.demo.service.HibernateSearchService;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class NewsController {
@@ -29,18 +30,46 @@ public class NewsController {
 
     }
 
+    //    @GetMapping("/rest_findNews/{title}")
+//    public List<RssBean> search(@PathVariable("title") String request) {
+//        List<RssBean> searchResults = null;
+//        try {
+//
+//            searchResults = searchService.fuzzySearch(request);
+//
+//        } catch (Exception e) {
+//            LOGGER.error(e.toString());
+//        }
+//
+//        return searchResults;
+//
+//    }
+
     @GetMapping("/rest_findNews/{title}")
     public List<RssBean> search(@PathVariable("title") String request) {
         List<RssBean> searchResults = null;
         try {
-
             searchResults = searchService.fuzzySearch(request);
-
         } catch (Exception e) {
             LOGGER.error(e.toString());
         }
 
-        return searchResults;
+        Comparator<RssBean> comparator = (o1, o2) -> {
+            if (o1.getNewsDate().isAfter(o2.getNewsDate()))
+                return -1;
+            else if (o1.getNewsDate().isBefore(o2.getNewsDate()))
+                return 1;
+            else return 0;
+        };
+
+        // сортируем список по дате, первая новость - самая свежая
+       Collections.sort(searchResults, comparator);
+
+       // отсекаем первые 10 новостей
+        List<RssBean> firstTenNews = searchResults.stream().parallel().limit(10).collect(Collectors.toList());
+
+        return firstTenNews;
 
     }
+
 }
