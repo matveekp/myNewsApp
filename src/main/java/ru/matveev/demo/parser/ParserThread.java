@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import ru.matveev.demo.entity.RatingEnum;
 import ru.matveev.demo.entity.RssBean;
 import ru.matveev.demo.repositories.RssBeanRepository;
 
@@ -61,7 +62,18 @@ public class ParserThread implements Runnable {
                     URL url = new URL(entry.getUri());
                     rss.setUrl(url);
                     rss.setSource(url.getHost());
-                    rss.setRating(5);
+
+                    // присваиваем по дефолту рейтинг 0
+                    rss.setRating(0);
+
+                    // далее проверяем по списку источников. Если есть такой, берем его рейтинг
+                    RatingEnum[] ratingEnums = RatingEnum.values();
+
+                    for (RatingEnum ratingEnum : ratingEnums) {
+                        if (url.getHost().equals(ratingEnum.getSource()))
+                            rss.setRating(ratingEnum.getRating());
+                    }
+
 
                     parser.getLinks().add(entry.getUri());
                     rssBeanRepository.save(rss);
