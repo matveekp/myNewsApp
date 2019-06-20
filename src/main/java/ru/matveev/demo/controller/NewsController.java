@@ -86,6 +86,8 @@ public class NewsController {
         try {
             searchResults = StreamSupport.stream(
                     rssBeanRepository.findByAdvance(rating, source).spliterator(), true)
+                    .sorted(new CompareByDate())
+                    .limit(10)
                     .collect(Collectors.toList());
         }catch (Exception e) {
             LOGGER.error(e.toString());
