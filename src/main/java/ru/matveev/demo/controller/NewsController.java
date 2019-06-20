@@ -1,10 +1,9 @@
 package ru.matveev.demo.controller;
 
+
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.matveev.demo.entity.RssBean;
 import ru.matveev.demo.repositories.RssBeanRepository;
 import ru.matveev.demo.service.HibernateSearchService;
@@ -65,6 +64,38 @@ public class NewsController {
         return searchResults;
     }
 
+    @GetMapping("/rest_newsBySource/{source}")
+    public List<RssBean> newsBySource(@PathVariable String source) {
+        List<RssBean> searchResults = null;
+        try {
+            searchResults = StreamSupport.stream(
+                    rssBeanRepository.findBySource(source).spliterator(), true)
+                    .sorted(new CompareByDate())
+                    .limit(10)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            LOGGER.error(e.toString());
+        }
+        return searchResults;
+    }
+
+    @GetMapping("/rest_findAdvanced/rating={rating}&source={source}")
+    public List<RssBean> newsAdvancedSearch(@PathVariable int rating, @PathVariable String source){
+
+        List<RssBean> searchResults = null;
+        try {
+            searchResults = StreamSupport.stream(
+                    rssBeanRepository.findByAdvance(rating, source).spliterator(), true)
+                    .collect(Collectors.toList());
+        }catch (Exception e) {
+            LOGGER.error(e.toString());
+        }
+        return searchResults;
+    }
+
+
+
+
     public class CompareByDate implements Comparator<RssBean> {
         @Override
         public int compare(RssBean o1, RssBean o2) {
@@ -75,6 +106,8 @@ public class NewsController {
             else return 0;
         }
     }
+
+
 
 
 }
