@@ -34,6 +34,7 @@ public class HibernateSearchService {
         fullTextEntityManager.createIndexer().start();
     }
 
+
     @Transactional
     public List<RssBean> fuzzySearch(String searchTerm) {
 

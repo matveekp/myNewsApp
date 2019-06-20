@@ -28,18 +28,12 @@ public class Parser {
     @Autowired
     private ApplicationContext context; // получить все объекты, которые там созданы
 
-    private boolean notFirstTimeIndexing;
-
     private Set<String> links = Collections.synchronizedSet(new HashSet<>());
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Parser.class);
 
     public Set<String> getLinks() {
         return links;
-    }
-
-    public void setLinks(Set<String> links) {
-        this.links = links;
     }
 
     @Scheduled(fixedRate = 300000)
@@ -55,17 +49,9 @@ public class Parser {
             LOGGER.error(e.toString());
         }
 
-        // если это первый запуск, то будет ошибка NullPointerException.
-        // Поэтому пауза перед началом индексирования должна быть дольше чем при последующих запусках
         try {
-            if (notFirstTimeIndexing) {
-                Thread.sleep(15000);
-                hibernateSearchService.indexing();
-            } else {
-                Thread.sleep(30000);
-                hibernateSearchService.indexing();
-                notFirstTimeIndexing = true;
-            }
+            Thread.sleep(30000);
+            hibernateSearchService.indexing();
         } catch (Exception e) {
             LOGGER.error(e.toString());
         }
